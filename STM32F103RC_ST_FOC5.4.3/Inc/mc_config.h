@@ -35,6 +35,9 @@
 #include "motor_control_protocol.h"
 #include "usart_frame_communication_protocol.h"
 
+#include "dac_common_ui.h"
+#include "dac_ui.h"
+
 #include "r3_2_f1xx_pwm_curr_fdbk.h"
 
 #include "hall_speed_pos_fdbk.h"
@@ -57,6 +60,8 @@ extern RDivider_Handle_t RealBusVoltageSensorParamsM1;
 extern CircleLimitation_Handle_t CircleLimitationM1;
 extern RampExtMngr_Handle_t RampExtMngrHFParamsM1;
 extern UI_Handle_t UI_Params;
+
+extern DAC_UI_Handle_t DAC_UI_Params;
 
 extern UFCP_Handle_t pUSART;
 

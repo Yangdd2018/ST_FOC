@@ -181,7 +181,7 @@ HALL_Handle_t HALL_M1 =
   .SpeedSamplingFreqHz = MEDIUM_FREQUENCY_TASK_RATE,
   .SpeedBufferSize     = HALL_AVERAGING_FIFO_DEPTH, 
  .TIMClockFreq       = HALL_TIM_CLK,         
- .TIMx                = TIM2, 
+ .TIMx                = TIM3, 
  
  .ICx_Filter          = M1_HALL_IC_FILTER,
  
@@ -205,7 +205,7 @@ NTC_Handle_t TempSensorParamsM1 =
   .TempRegConv =
   {
     .regADC = ADC1,
-    .channel = MC_ADC_CHANNEL_9,
+    .channel = MC_ADC_CHANNEL_10,
     .samplingTime = M1_TEMP_SAMPLING_TIME,   
   },  
   .hLowPassFilterBW        = M1_TEMP_SW_FILTER_BW_FACTOR,
@@ -233,7 +233,7 @@ RDivider_Handle_t RealBusVoltageSensorParamsM1 =
   .VbusRegConv =
   {
     .regADC = ADC1,
-    .channel = MC_ADC_CHANNEL_8,
+    .channel = MC_ADC_CHANNEL_15,
     .samplingTime = M1_VBUS_SAMPLING_TIME,   
   },
   .LowPassFilterBW       =  M1_VBUS_SW_FILTER_BW_FACTOR,  
@@ -245,6 +245,19 @@ RDivider_Handle_t RealBusVoltageSensorParamsM1 =
 UI_Handle_t UI_Params =
 {
   .bDriveNum = 0,
+  .pFct_DACInit = &DAC_Init,               
+  .pFct_DACExec = &DAC_Exec,
+  .pFctDACSetChannelConfig    = &DAC_SetChannelConfig,
+  .pFctDACGetChannelConfig    = &DAC_GetChannelConfig,
+  .pFctDACSetUserChannelValue = &DAC_SetUserChannelValue,
+  .pFctDACGetUserChannelValue = &DAC_GetUserChannelValue,
+ 
+};
+
+DAC_UI_Handle_t DAC_UI_Params = 
+{
+  .hDAC_CH1_ENABLED = ENABLE,  
+  .hDAC_CH2_ENABLED = ENABLE
 };
 
 /** RAMP for Motor1.

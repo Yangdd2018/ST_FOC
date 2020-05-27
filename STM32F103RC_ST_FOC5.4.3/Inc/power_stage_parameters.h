@@ -39,7 +39,7 @@
                                                        much the Vbus is attenuated  
                                                        before being converted into 
                                                        digital value */
-#define NOMINAL_BUS_VOLTAGE_V         24 
+#define NOMINAL_BUS_VOLTAGE_V         48 
 /******** Current reading parameters section ******/
 /*** Topology ***/
 #define THREE_SHUNT
@@ -57,9 +57,9 @@
    
 /************ Temperature sensing section ***************/
 /* V[V]=V0+dV/dT[V/Celsius]*(T-T0)[Celsius]*/
-#define V0_V                          0.290 /*!< in Volts */
+#define V0_V                          0.926 /*!< in Volts */
 #define T0_C                          25 /*!< in Celsius degrees */
-#define dV_dT                         0.025 /*!< V/Celsius degrees */
+#define dV_dT                         0.030 /*!< V/Celsius degrees */
 #define T_MAX                         70 /*!< Sensor measured 
                                                        temperature at maximum 
                                                        power stage working 

@@ -64,20 +64,20 @@ const R3_2_Params_t R3_2_ParamsM1 =
   
                     
 
-  .ADCConfig1 = {   MC_ADC_CHANNEL_5<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_4<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_4<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_4<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_4<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_5<<ADC_JSQR_JSQ4_Pos
+  .ADCConfig1 = {   MC_ADC_CHANNEL_12<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_11<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_11<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_11<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_11<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_12<<ADC_JSQR_JSQ4_Pos
                   },
 
-  .ADCConfig2 = {   MC_ADC_CHANNEL_6<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_6<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_6<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_5<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_5<<ADC_JSQR_JSQ4_Pos
-                   ,MC_ADC_CHANNEL_6<<ADC_JSQR_JSQ4_Pos
+  .ADCConfig2 = {   MC_ADC_CHANNEL_13<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_13<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_13<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_12<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_12<<ADC_JSQR_JSQ4_Pos
+                   ,MC_ADC_CHANNEL_13<<ADC_JSQR_JSQ4_Pos
                   },
 				  
   .ADCDataReg1 = { &ADC1->JDR1 // Phase B, Phase C

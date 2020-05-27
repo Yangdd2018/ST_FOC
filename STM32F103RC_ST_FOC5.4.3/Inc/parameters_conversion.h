@@ -131,8 +131,8 @@
 /****** Prepares the UI configurations according the MCconfxx settings ********/
 #define COM_ENABLE | OPT_COM
 
-#define DAC_ENABLE
-#define DAC_OP_ENABLE
+#define DAC_ENABLE | OPT_DAC
+#define DAC_OP_ENABLE | UI_CFGOPT_DAC
 
 /* Motor 1 settings */
 #define FW_ENABLE
@@ -169,7 +169,7 @@
 /**********  AUXILIARY HALL TIMER MOTOR 1 *************/
 #define M1_HALL_TIM_PERIOD 65535
 #define M1_HALL_IC_FILTER  11
-#define SPD_TIM_M1_IRQHandler TIM2_IRQHandler
+#define SPD_TIM_M1_IRQHandler TIM3_IRQHandler
 
 /* MMI Table Motor 1 MAX_MODULATION_92_PER_CENT */
 #define START_INDEX 54

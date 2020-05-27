@@ -61,7 +61,7 @@ void USART_IRQHandler(void);
 void HardFault_Handler(void);
 void SysTick_Handler(void);
 void PFC_TIM_IRQHandler(void);
-void EXTI4_IRQHandler (void);
+void EXTI0_IRQHandler (void);
 
 /**
   * @brief  This function handles ADC1/ADC2 interrupt request.
@@ -76,7 +76,7 @@ void ADC1_2_IRQHandler(void)
   
   ADC1->SR &= ~(uint32_t)(ADC_FLAG_JEOC | ADC_FLAG_JSTRT);
 
-  TSK_HighFrequencyTask();          /*GUI, this section is present only if DAC is disabled*/
+  UI_DACUpdate(TSK_HighFrequencyTask());  /*GUI, this section is present only if DAC is enabled*/
 
   /* USER CODE BEGIN ADC1_2_IRQn 1 */
 
@@ -301,14 +301,14 @@ static uint8_t SystickDividerCounter = SYSTICK_DIVIDER;
 }
 
 /**
-  * @brief  This function handles Button IRQ on PIN PE4.
+  * @brief  This function handles Button IRQ on PIN PA0.
   */
-void EXTI4_IRQHandler (void)
+void EXTI0_IRQHandler (void)
 {
 	/* USER CODE BEGIN START_STOP_BTN */
-  if ( LL_EXTI_ReadFlag_0_31(LL_EXTI_LINE_4) ) 
+  if ( LL_EXTI_ReadFlag_0_31(LL_EXTI_LINE_0) ) 
   {                                                                                
-    LL_EXTI_ClearFlag_0_31 (LL_EXTI_LINE_4);  
+    LL_EXTI_ClearFlag_0_31 (LL_EXTI_LINE_0);  
     UI_HandleStartStopButton_cb ();                                               
   }
 
