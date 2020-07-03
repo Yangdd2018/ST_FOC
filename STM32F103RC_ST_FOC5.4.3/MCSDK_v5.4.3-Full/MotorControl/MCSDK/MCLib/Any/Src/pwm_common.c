@@ -73,6 +73,7 @@
  * @param  none
  * @retval none
  */
+ #if 0
 __weak void startTimers( void )
 {
   uint32_t isTIM2ClockOn;
@@ -94,7 +95,7 @@ __weak void startTimers( void )
     LL_TIM_SetTriggerOutput( TIM2, trigOut );
   }
 }
-
+#endif
 /**
  * @brief  It waits for the end of the polarization. If the polarization exceeds the
  *         the number of needed PWM cycles, it reports an error.

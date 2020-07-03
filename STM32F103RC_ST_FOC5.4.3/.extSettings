@@ -1,2 +1,2 @@
 [Others]
-Define=ARM_MATH_CM3
+Define=ARM_MATH_CM0

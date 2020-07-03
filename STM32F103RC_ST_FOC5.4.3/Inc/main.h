@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
+#include "stm32f0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -60,45 +60,43 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define M1_TEMPERATURE_Pin GPIO_PIN_0
-#define M1_TEMPERATURE_GPIO_Port GPIOC
-#define M1_CURR_AMPL_U_Pin GPIO_PIN_1
-#define M1_CURR_AMPL_U_GPIO_Port GPIOC
-#define M1_CURR_AMPL_V_Pin GPIO_PIN_2
-#define M1_CURR_AMPL_V_GPIO_Port GPIOC
-#define M1_CURR_AMPL_W_Pin GPIO_PIN_3
-#define M1_CURR_AMPL_W_GPIO_Port GPIOC
-#define Start_Stop_Pin GPIO_PIN_0
-#define Start_Stop_GPIO_Port GPIOA
-#define Start_Stop_EXTI_IRQn EXTI0_IRQn
-#define DBG_DAC_CH1_Pin GPIO_PIN_4
-#define DBG_DAC_CH1_GPIO_Port GPIOA
-#define DBG_DAC_CH2_Pin GPIO_PIN_5
-#define DBG_DAC_CH2_GPIO_Port GPIOA
-#define M1_BUS_VOLTAGE_Pin GPIO_PIN_5
-#define M1_BUS_VOLTAGE_GPIO_Port GPIOC
-#define UART_TX_Pin GPIO_PIN_10
-#define UART_TX_GPIO_Port GPIOB
-#define UART_RX_Pin GPIO_PIN_11
-#define UART_RX_GPIO_Port GPIOB
+#define M1_CURR_AMPL_U_Pin GPIO_PIN_0
+#define M1_CURR_AMPL_U_GPIO_Port GPIOA
+#define M1_CURR_AMPL_V_Pin GPIO_PIN_1
+#define M1_CURR_AMPL_V_GPIO_Port GPIOA
+#define M1_CURR_AMPL_W_Pin GPIO_PIN_2
+#define M1_CURR_AMPL_W_GPIO_Port GPIOA
+#define M1_BUS_VOLTAGE_Pin GPIO_PIN_3
+#define M1_BUS_VOLTAGE_GPIO_Port GPIOA
+#define M1_TEMPERATURE_Pin GPIO_PIN_4
+#define M1_TEMPERATURE_GPIO_Port GPIOA
+#define M1_HALL_H3_Pin GPIO_PIN_0
+#define M1_HALL_H3_GPIO_Port GPIOB
+#define DAC_EMUL_CH1_Pin GPIO_PIN_1
+#define DAC_EMUL_CH1_GPIO_Port GPIOB
 #define M1_PWM_UL_Pin GPIO_PIN_13
 #define M1_PWM_UL_GPIO_Port GPIOB
 #define M1_PWM_VL_Pin GPIO_PIN_14
 #define M1_PWM_VL_GPIO_Port GPIOB
 #define M1_PWM_WL_Pin GPIO_PIN_15
 #define M1_PWM_WL_GPIO_Port GPIOB
-#define M1_HALL_H1_Pin GPIO_PIN_6
-#define M1_HALL_H1_GPIO_Port GPIOC
-#define M1_HALL_H2_Pin GPIO_PIN_7
-#define M1_HALL_H2_GPIO_Port GPIOC
-#define M1_HALL_H3_Pin GPIO_PIN_8
-#define M1_HALL_H3_GPIO_Port GPIOC
 #define M1_PWM_UH_Pin GPIO_PIN_8
 #define M1_PWM_UH_GPIO_Port GPIOA
 #define M1_PWM_VH_Pin GPIO_PIN_9
 #define M1_PWM_VH_GPIO_Port GPIOA
 #define M1_PWM_WH_Pin GPIO_PIN_10
 #define M1_PWM_WH_GPIO_Port GPIOA
+#define Start_Stop_Pin GPIO_PIN_15
+#define Start_Stop_GPIO_Port GPIOA
+#define Start_Stop_EXTI_IRQn EXTI4_15_IRQn
+#define M1_HALL_H1_Pin GPIO_PIN_4
+#define M1_HALL_H1_GPIO_Port GPIOB
+#define M1_HALL_H2_Pin GPIO_PIN_5
+#define M1_HALL_H2_GPIO_Port GPIOB
+#define UART_TX_Pin GPIO_PIN_6
+#define UART_TX_GPIO_Port GPIOB
+#define UART_RX_Pin GPIO_PIN_7
+#define UART_RX_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

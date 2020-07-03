@@ -27,17 +27,19 @@
 #error "The code is not ready for that..."
 #endif
 
-  #include "stm32f1xx_ll_rcc.h"
-  #include "stm32f1xx_ll_system.h"
-  #include "stm32f1xx_ll_adc.h"
-  #include "stm32f1xx_ll_tim.h"
-  #include "stm32f1xx_ll_gpio.h"
-  #include "stm32f1xx_ll_usart.h"
-  #include "stm32f1xx_ll_dac.h"
-  #include "stm32f1xx_ll_dma.h"
-  #include "stm32f1xx_ll_spi.h"
-  #include "stm32f1xx_ll_bus.h"
-  #include "stm32f1xx_ll_system.h"
+  #include "stm32f0xx_ll_bus.h"
+  #include "stm32f0xx_ll_rcc.h"
+  #include "stm32f0xx_ll_system.h"
+  #include "stm32f0xx_ll_adc.h"
+  #include "stm32f0xx_ll_tim.h"
+  #include "stm32f0xx_ll_gpio.h"
+  #include "stm32f0xx_ll_usart.h"
+  #include "stm32f0xx_ll_dac.h"
+  #include "stm32f0xx_ll_dma.h"
+  #include "stm32f0xx_ll_comp.h"
+
+/* Enable Fast division optimization for cortex-M0[+] micros*/
+  # define FASTDIV
 /**
  * @name Predefined Speed Units
  *

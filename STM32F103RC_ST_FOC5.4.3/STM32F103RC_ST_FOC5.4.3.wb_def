@@ -57,11 +57,11 @@
 		<define key="MIN_APPLICATION_SPEED" value="0" />
 		<define key="MEAS_ERRORS_BEFORE_FAULTS" value="4" />
 		<define key="ENC_MEAS_ERRORS_BEFORE_FAULTS" value="4" />
-		<define key="ENC_ICx_FILTER" value="50" />
+		<define key="ENC_ICx_FILTER" value="34" />
 		<define key="ENC_INVERT_SPEED" value="DISABLE" />
 		<define key="ENC_AVERAGING_FIFO_DEPTH" value="16" />
 		<define key="HALL_MEAS_ERRORS_BEFORE_FAULTS" value="4" />
-		<define key="HALL_ICx_FILTER" value="94" />
+		<define key="HALL_ICx_FILTER" value="62" />
 		<define key="HALL_AVERAGING_FIFO_DEPTH" value="6" />
 		<define key="HALL_MTPA" value="FALSE" />
 		<define key="VARIANCE_THRESHOLD" value="0.1" />
@@ -143,7 +143,7 @@
 		<define key="TF_KIDIV" value="16384" />
 		<define key="TF_KDDIV" value="8192" />
 		<define key="TFDIFFERENTIAL_TERM_ENABLING" value="DISABLE" />
-		<define key="SPEED_LOOP_FREQUENCY_HZ" value="1000" />
+		<define key="SPEED_LOOP_FREQUENCY_HZ" value="250" />
 		<define key="PID_SPEED_KP_DEFAULT" value="1600" />
 		<define key="PID_SPEED_KI_DEFAULT" value="150" />
 		<define key="PID_SPEED_KD_DEFAULT" value="0" />
@@ -228,35 +228,35 @@
 		<define key="OPEN_LOOP_VF" value="FALSE" />
 		<define key="OPEN_LOOP_K" value="44" />
 		<define key="OPEN_LOOP_OFF" value="4400" />
-		<define key="STM32F103x_HD" value="TRUE" />
-		<define key="MCU_TYPE" value="STM32F103x_HD" />
+		<define key="STM32F030x" value="TRUE" />
+		<define key="MCU_TYPE" value="STM32F030x" />
 		<define key="ADC_REFERENCE_VOLTAGE" value="3.30" />
 		<define key="CLOCK_SOURCE" value="EXTERNAL" />
 		<define key="EXT_CLK_8_MHZ" value="TRUE" />
 		<define key="EXT_CLOCK_FREQUENCY" value="EXT_CLK_8_MHZ" />
-		<define key="CPU_CLK_72_MHZ" value="TRUE" />
-		<define key="CLOCK_FREQUENCY" value="CPU_CLK_72_MHZ" />
+		<define key="CPU_CLK_48_MHZ" value="TRUE" />
+		<define key="CLOCK_FREQUENCY" value="CPU_CLK_48_MHZ" />
 		<define key="CCMRAM_ENABLED" value="FALSE" />
 		<define key="PWM_TIMER_SELECTION" value="PWM_TIM1" />
 		<define key="PWM_TIMER_REMAPPING" value="PWM_NO_REMAP" />
 		<define key="PHASE_UH_GPIO_PORT" value="GPIOA" />
 		<define key="PHASE_UH_GPIO_PIN" value="GPIO_Pin_8" />
-		<define key="PHASE_UH_GPIO_AF" value="GPIO_AF_6" />
+		<define key="PHASE_UH_GPIO_AF" value="GPIO_AF_2" />
 		<define key="PHASE_VH_GPIO_PORT" value="GPIOA" />
 		<define key="PHASE_VH_GPIO_PIN" value="GPIO_Pin_9" />
-		<define key="PHASE_VH_GPIO_AF" value="GPIO_AF_6" />
+		<define key="PHASE_VH_GPIO_AF" value="GPIO_AF_2" />
 		<define key="PHASE_WH_GPIO_PORT" value="GPIOA" />
 		<define key="PHASE_WH_GPIO_PIN" value="GPIO_Pin_10" />
-		<define key="PHASE_WH_GPIO_AF" value="GPIO_AF_6" />
+		<define key="PHASE_WH_GPIO_AF" value="GPIO_AF_2" />
 		<define key="PHASE_UL_GPIO_PORT" value="GPIOB" />
 		<define key="PHASE_UL_GPIO_PIN" value="GPIO_Pin_13" />
-		<define key="PHASE_UL_GPIO_AF" value="GPIO_AF_6" />
+		<define key="PHASE_UL_GPIO_AF" value="GPIO_AF_2" />
 		<define key="PHASE_VL_GPIO_PORT" value="GPIOB" />
 		<define key="PHASE_VL_GPIO_PIN" value="GPIO_Pin_14" />
-		<define key="PHASE_VL_GPIO_AF" value="GPIO_AF_6" />
+		<define key="PHASE_VL_GPIO_AF" value="GPIO_AF_2" />
 		<define key="PHASE_WL_GPIO_PORT" value="GPIOB" />
 		<define key="PHASE_WL_GPIO_PIN" value="GPIO_Pin_15" />
-		<define key="PHASE_WL_GPIO_AF" value="GPIO_AF_4" />
+		<define key="PHASE_WL_GPIO_AF" value="GPIO_AF_2" />
 		<define key="EMERGENCY_STOP_GPIO_PORT" value="GPIOB" />
 		<define key="EMERGENCY_STOP_GPIO_PIN" value="GPIO_Pin_12" />
 		<define key="BRKIN_GPIO_AF" value="GPIO_AF_2" />
@@ -265,18 +265,18 @@
 		<define key="BRKIN2_GPIO_AF" value="GPIO_AF_2" />
 		<define key="HALL_TIMER_SELECTION" value="HALL_TIM3" />
 		<define key="HALL_TIMER_REMAPPING" value="FULL_REMAP_TIM3" />
-		<define key="H1_GPIO_PORT" value="GPIOC" />
-		<define key="H1_GPIO_PIN" value="GPIO_Pin_6" />
-		<define key="H2_GPIO_PORT" value="GPIOC" />
-		<define key="H2_GPIO_PIN" value="GPIO_Pin_7" />
-		<define key="H3_GPIO_PORT" value="GPIOC" />
-		<define key="H3_GPIO_PIN" value="GPIO_Pin_8" />
-		<define key="ENC_TIMER_SELECTION" value="ENC_TIM2" />
-		<define key="ENC_TIMER_REMAPPING" value="NO_REMAP_TIM2" />
+		<define key="H1_GPIO_PORT" value="GPIOB" />
+		<define key="H1_GPIO_PIN" value="GPIO_Pin_4" />
+		<define key="H2_GPIO_PORT" value="GPIOB" />
+		<define key="H2_GPIO_PIN" value="GPIO_Pin_5" />
+		<define key="H3_GPIO_PORT" value="GPIOB" />
+		<define key="H3_GPIO_PIN" value="GPIO_Pin_0" />
+		<define key="ENC_TIMER_SELECTION" value="ENC_TIM3" />
+		<define key="ENC_TIMER_REMAPPING" value="NO_REMAP_TIM3" />
 		<define key="ENC_A_GPIO_PORT" value="GPIOA" />
-		<define key="ENC_A_GPIO_PIN" value="GPIO_Pin_0" />
-		<define key="ENC_B_GPIO_PORT" value="GPIOB" />
-		<define key="ENC_B_GPIO_PIN" value="GPIO_Pin_3" />
+		<define key="ENC_A_GPIO_PIN" value="GPIO_Pin_6" />
+		<define key="ENC_B_GPIO_PORT" value="GPIOA" />
+		<define key="ENC_B_GPIO_PIN" value="GPIO_Pin_7" />
 		<define key="ENC_USE_CH3" value="FALSE" />
 		<define key="R_BRAKE_GPIO_PORT" value="GPIOE" />
 		<define key="R_BRAKE_GPIO_PIN" value="GPIO_Pin_5" />
@@ -284,49 +284,49 @@
 		<define key="OV_CURR_BYPASS_GPIO_PIN" value="GPIO_Pin_5" />
 		<define key="INRUSH_CURRLIMIT_GPIO_PORT" value="GPIOE" />
 		<define key="INRUSH_CURRLIMIT_GPIO_PIN" value="GPIO_Pin_4" />
-		<define key="PHASE_U_CURR_ADC" value="ADC123" />
-		<define key="PHASE_U_CURR_CHANNEL" value="ADC_Channel_11" />
-		<define key="PHASE_U_GPIO_PORT" value="GPIOC" />
-		<define key="PHASE_U_GPIO_PIN" value="GPIO_Pin_1" />
-		<define key="PHASE_V_CURR_ADC" value="ADC123" />
-		<define key="PHASE_V_CURR_CHANNEL" value="ADC_Channel_12" />
-		<define key="PHASE_V_GPIO_PORT" value="GPIOC" />
-		<define key="PHASE_V_GPIO_PIN" value="GPIO_Pin_2" />
-		<define key="PHASE_W_CURR_ADC" value="ADC123" />
-		<define key="PHASE_W_CURR_CHANNEL" value="ADC_Channel_13" />
-		<define key="PHASE_W_GPIO_PORT" value="GPIOC" />
-		<define key="PHASE_W_GPIO_PIN" value="GPIO_Pin_3" />
+		<define key="PHASE_U_CURR_ADC" value="ADC1" />
+		<define key="PHASE_U_CURR_CHANNEL" value="ADC_Channel_0" />
+		<define key="PHASE_U_GPIO_PORT" value="GPIOA" />
+		<define key="PHASE_U_GPIO_PIN" value="GPIO_Pin_0" />
+		<define key="PHASE_V_CURR_ADC" value="ADC1" />
+		<define key="PHASE_V_CURR_CHANNEL" value="ADC_Channel_1" />
+		<define key="PHASE_V_GPIO_PORT" value="GPIOA" />
+		<define key="PHASE_V_GPIO_PIN" value="GPIO_Pin_1" />
+		<define key="PHASE_W_CURR_ADC" value="ADC1" />
+		<define key="PHASE_W_CURR_CHANNEL" value="ADC_Channel_2" />
+		<define key="PHASE_W_GPIO_PORT" value="GPIOA" />
+		<define key="PHASE_W_GPIO_PIN" value="GPIO_Pin_2" />
 		<define key="PHASE_CURRENTS_ADC" value="ADC1_2" />
 		<define key="PHASE_CURRENTS_CHANNEL" value="ADC_Channel_9" />
-		<define key="PHASE_CURRENTS_GPIO_PORT" value="GPIOB" />
-		<define key="PHASE_CURRENTS_GPIO_PIN" value="GPIO_Pin_1" />
+		<define key="PHASE_CURRENTS_GPIO_PORT" value="GPIOA" />
+		<define key="PHASE_CURRENTS_GPIO_PIN" value="GPIO_Pin_0" />
 		<define key="VBUS_ADC" value="ADC1" />
-		<define key="VBUS_CHANNEL" value="ADC_Channel_15" />
-		<define key="VBUS_GPIO_PORT" value="GPIOC" />
-		<define key="VBUS_GPIO_PIN" value="GPIO_Pin_5" />
+		<define key="VBUS_CHANNEL" value="ADC_Channel_3" />
+		<define key="VBUS_GPIO_PORT" value="GPIOA" />
+		<define key="VBUS_GPIO_PIN" value="GPIO_Pin_3" />
 		<define key="TEMP_FDBK_ADC" value="ADC1" />
-		<define key="TEMP_FDBK_CHANNEL" value="ADC_Channel_10" />
-		<define key="TEMP_FDBK_GPIO_PORT" value="GPIOC" />
-		<define key="TEMP_FDBK_GPIO_PIN" value="GPIO_Pin_0" />
-		<define key="USART_SELECTION" value="USE_USART3" />
-		<define key="USART_REMAPPING" value="NO_REMAP_USART3" />
+		<define key="TEMP_FDBK_CHANNEL" value="ADC_Channel_4" />
+		<define key="TEMP_FDBK_GPIO_PORT" value="GPIOA" />
+		<define key="TEMP_FDBK_GPIO_PIN" value="GPIO_Pin_4" />
+		<define key="USART_SELECTION" value="USE_USART1" />
+		<define key="USART_REMAPPING" value="NO_REMAP_USART1" />
 		<define key="USART_SPEED" value="115200" />
 		<define key="USART_TX_GPIO_PORT" value="GPIOB" />
-		<define key="USART_TX_GPIO_PIN" value="GPIO_Pin_10" />
+		<define key="USART_TX_GPIO_PIN" value="GPIO_Pin_6" />
 		<define key="USART_RX_GPIO_PORT" value="GPIOB" />
-		<define key="USART_RX_GPIO_PIN" value="GPIO_Pin_11" />
+		<define key="USART_RX_GPIO_PIN" value="GPIO_Pin_7" />
 		<define key="START_STOP_BTN" value="ENABLE" />
 		<define key="START_STOP_POLARITY" value="DIN_ACTIVE_HIGH" />
 		<define key="START_STOP_POLARITY_EDGE" value="GPIO_PULLDOWN" />
 		<define key="START_STOP_GPIO_PORT" value="GPIOA" />
-		<define key="START_STOP_GPIO_PIN" value="GPIO_Pin_0" />
+		<define key="START_STOP_GPIO_PIN" value="GPIO_Pin_15" />
 		<define key="BKIN_MODE" value="NONE" />
 		<define key="BKIN2_MODE" value="NONE" />
 		<define key="ADC_1_PERIPH" value="ADC1" />
 		<define key="ADC_2_PERIPH" value="ADC2" />
 		<define key="ADC_PERIPH" value="ADC1" />
 		<define key="ADC_AHBPERIPH" value="RCC_AHBPeriph_ADC12" />
-		<define key="ADC_CLOCK_WB_FREQ" value="12" />
+		<define key="ADC_CLOCK_WB_FREQ" value="14" />
 		<define key="ADC_CLOCK_WB_DIV" value="1" />
 		<define key="REGCONVADC" value="ADC1" />
 		<define key="USE_INTERNAL_OPAMP" value="DISABLE" />
@@ -422,19 +422,19 @@
 		<define key="OCPA_OUTPUT" value="COMP_Output_TIM1BKIN2" />
 		<define key="OCPA_OUTPUT_GPIO_PORT" value="GPIOA" />
 		<define key="OCPA_OUTPUT_GPIO_PIN" value="GPIO_Pin_0" />
-		<define key="OCPA_OUTPUT_GPIO_AF" value="GPIO_AF_8" />
+		<define key="OCPA_OUTPUT_GPIO_AF" value="GPIO_AF_2" />
 		<define key="OCPB_OUTPUT" value="COMP_Output_TIM1BKIN2" />
 		<define key="OCPB_OUTPUT_GPIO_PORT" value="GPIOA" />
 		<define key="OCPB_OUTPUT_GPIO_PIN" value="GPIO_Pin_2" />
-		<define key="OCPB_OUTPUT_GPIO_AF" value="GPIO_AF_8" />
+		<define key="OCPB_OUTPUT_GPIO_AF" value="GPIO_AF_2" />
 		<define key="OCPC_OUTPUT" value="COMP_Output_TIM1BKIN2" />
 		<define key="OCPC_OUTPUT_GPIO_PORT" value="GPIOC" />
 		<define key="OCPC_OUTPUT_GPIO_PIN" value="GPIO_Pin_8" />
-		<define key="OCPC_OUTPUT_GPIO_AF" value="GPIO_AF_7" />
+		<define key="OCPC_OUTPUT_GPIO_AF" value="GPIO_AF_2" />
 		<define key="OCP_OUTPUT" value="COMP_Output_TIM1BKIN2" />
 		<define key="OCP_OUTPUT_GPIO_PORT" value="GPIOA" />
 		<define key="OCP_OUTPUT_GPIO_PIN" value="GPIO_Pin_2" />
-		<define key="OCP_OUTPUT_GPIO_AF" value="GPIO_AF_8" />
+		<define key="OCP_OUTPUT_GPIO_AF" value="GPIO_AF_2" />
 		<define key="OCPA_OUTPUTPOL" value="COMP_OutputPol_NonInverted" />
 		<define key="OCPB_OUTPUTPOL" value="COMP_OutputPol_NonInverted" />
 		<define key="OCPC_OUTPUTPOL" value="COMP_OutputPol_NonInverted" />
@@ -451,12 +451,12 @@
 		<define key="OVP_OUTPUT" value="COMP_Output_TIM1BKIN" />
 		<define key="OVP_OUTPUT_GPIO_PORT" value="GPIOC" />
 		<define key="OVP_OUTPUT_GPIO_PIN" value="GPIO_Pin_2" />
-		<define key="OVP_OUTPUT_GPIO_AF" value="GPIO_AF_3" />
+		<define key="OVP_OUTPUT_GPIO_AF" value="GPIO_AF_2" />
 		<define key="OVP_OUTPUTPOL" value="COMP_OutputPol_NonInverted" />
 		<define key="OCP_FILTER" value="COMP_Mode_HighSpeed" />
 		<define key="OVP_FILTER" value="COMP_Mode_HighSpeed" />
-		<define key="MAX_MODULATION_95_PER_CENT" value="TRUE" />
-		<define key="MAX_MODULATION_INDEX" value="MAX_MODULATION_95_PER_CENT" />
+		<define key="MAX_MODULATION_87_PER_CENT" value="TRUE" />
+		<define key="MAX_MODULATION_INDEX" value="MAX_MODULATION_87_PER_CENT" />
 		<define key="CURR_SAMPLING_TIME" value="7" />
 		<define key="VBUS_ADC_SAMPLING_TIME" value="7" />
 		<define key="TEMP_ADC_SAMPLING_TIME" value="7" />
@@ -466,20 +466,21 @@
 		<define key="BKIN2_FILTER" value="0" />
 		<define key="DAC_FUNCTIONALITY" value="ENABLE" />
 		<define key="DEBUG_DAC_CH1" value="ENABLE" />
-		<define key="DEBUG_DAC_CH2" value="ENABLE" />
+		<define key="DEBUG_DAC_CH2" value="DISABLE" />
 		<define key="DEFAULT_DAC_CHANNEL_1" value="MC_PROTOCOL_REG_I_A" />
 		<define key="DEFAULT_DAC_CHANNEL_2" value="MC_PROTOCOL_REG_I_B" />
 		<define key="DEFAULT_DAC_MOTOR" value="0" />
-		<define key="DAC_TIMER_SELECTION" value="TIM3" />
-		<define key="DAC_TIMER_CH1_GPIO_PORT" value="GPIOA" />
-		<define key="DAC_TIMER_CH1_GPIO_PIN" value="GPIO_Pin_4" />
+		<define key="DAC_TIMER_SELECTION" value="TIM14" />
+		<define key="DAC_EMULATED_1" value="CH1" />
+		<define key="DAC_TIMER_CH1_GPIO_PORT" value="GPIOB" />
+		<define key="DAC_TIMER_CH1_GPIO_PIN" value="GPIO_Pin_1" />
 		<define key="DAC_TIMER_CH2_GPIO_PORT" value="GPIOA" />
-		<define key="DAC_TIMER_CH2_GPIO_PIN" value="GPIO_Pin_5" />
+		<define key="DAC_TIMER_CH2_GPIO_PIN" value="GPIO_Pin_0" />
 		<define key="SW_OV_CURRENT_PROT_ENABLING" value="DISABLE" />
 		<define key="CTRBDID" value="0" />
 		<define key="SHARED_SIGNAL_ENABLE" value="FALSE" />
-		<define key="DAC_EMULATED" value="FALSE" />
-		<define key="MCU" value="STM32F103RC" />
+		<define key="DAC_EMULATED" value="TRUE" />
+		<define key="MCU" value="STM32F030R8" />
 		<define key="BOARD" value="CUSTOM" />
 		<define key="MC_WORKBENCH_VERSION" value="5.4.3.19514" />
 	</defines>

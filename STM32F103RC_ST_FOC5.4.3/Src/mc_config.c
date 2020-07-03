@@ -119,21 +119,21 @@ SpeednTorqCtrl_Handle_t SpeednTorqCtrlM1 =
   .TorqueRefDefault =				(int16_t)DEFAULT_TORQUE_COMPONENT,
   .IdrefDefault =					(int16_t)DEFAULT_FLUX_COMPONENT,                                                                     
 };
-PWMC_R3_2_Handle_t PWM_Handle_M1 =
+PWMC_R3_1_Handle_t PWM_Handle_M1 =
 {
   {
-    .pFctGetPhaseCurrents              = &R3_2_GetPhaseCurrents,
-    .pFctSwitchOffPwm                  = &R3_2_SwitchOffPWM,
-    .pFctSwitchOnPwm                   = &R3_2_SwitchOnPWM,
-    .pFctCurrReadingCalib              = &R3_2_CurrentReadingPolarization,
-    .pFctTurnOnLowSides                = &R3_2_TurnOnLowSides,
-    .pFctSetADCSampPointSectX          = &R3_2_SetADCSampPointSectX,
-    .pFctIsOverCurrentOccurred         = &R3_2_IsOverCurrentOccurred,
+    .pFctGetPhaseCurrents              = &R3_1_GetPhaseCurrents,    
+    .pFctSwitchOffPwm                  = &R3_1_SwitchOffPWM,             
+    .pFctSwitchOnPwm                   = &R3_1_SwitchOnPWM,              
+    .pFctCurrReadingCalib              = &R3_1_CurrentReadingCalibration,
+    .pFctTurnOnLowSides                = &R3_1_TurnOnLowSides,             
+    .pFctSetADCSampPointSectX          = &R3_1_SetADCSampPointSectX,     
+    .pFctIsOverCurrentOccurred         = &R3_1_IsOverCurrentOccurred,    
     .pFctOCPSetReferenceVoltage        = MC_NULL,
     .pFctRLDetectionModeEnable         = MC_NULL,    
     .pFctRLDetectionModeDisable        = MC_NULL,   
     .pFctRLDetectionModeSetDuty        = MC_NULL,   
-    .hT_Sqrt3 = (PWM_PERIOD_CYCLES*SQRT3FACTOR)/16384u,
+    .hT_Sqrt3 = (PWM_PERIOD_CYCLES*SQRT3FACTOR)/16384u,     
     .Sector = 0,    
     .CntPhA = 0,
     .CntPhB = 0,
@@ -141,24 +141,28 @@ PWMC_R3_2_Handle_t PWM_Handle_M1 =
     .SWerror = 0,
     .TurnOnLowSidesAction = false, 
     .OffCalibrWaitTimeCounter = 0, 
-    .Motor = M1,     
-    .RLDetectionMode = false, 
+    .Motor = 0,     
+    .RLDetectionMode = false,
     .Ia = 0, 
     .Ib = 0, 
     .Ic = 0, 
-    .DTTest = 0,   
+    .DTTest = 0,    
     .DTCompCnt = DTCOMPCNT,
-    .PWMperiod          = PWM_PERIOD_CYCLES,  
-    .OffCalibrWaitTicks = (uint16_t)((SYS_TICK_FREQUENCY * OFFCALIBRWAIT_MS)/ 1000),                         
-    .Ton                 = TON,                              
-    .Toff                = TOFF                             
+    .PWMperiod = PWM_PERIOD_CYCLES,
+    .OffCalibrWaitTicks = (uint16_t)((SYS_TICK_FREQUENCY * OFFCALIBRWAIT_MS)/ 1000),
+    .Ton                 = TON,
+    .Toff                = TOFF
   },
-  .Half_PWMPeriod = PWM_PERIOD_CYCLES/2u,                               
-  .PhaseAOffset = 0,   
-  .PhaseBOffset = 0,   
-  .PhaseCOffset = 0,      
-
-  .pParams_str = &R3_2_ParamsM1
+  .PhaseAOffset = 0,  
+  .PhaseBOffset = 0,  
+  .PhaseCOffset = 0,  
+  .Half_PWMPeriod = PWM_PERIOD_CYCLES/2u, 
+  .OverCurrentFlag = false,  
+  .OverVoltageFlag = false,  
+  .BrakeActionLock = false,  
+  .PolarizationCounter = 0,
+  .ADC1_DMA_converted = {0,0}, 
+  .pParams_str = &R3_1_Params
 };
 
 /**
@@ -189,11 +193,11 @@ HALL_Handle_t HALL_M1 =
  .HallMtpa            = HALL_MTPA,  
 
  .H1Port             =  M1_HALL_H1_GPIO_Port, 
- .H1Pin              =  M1_HALL_H1_Pin<<8,    
+ .H1Pin              =  M1_HALL_H1_Pin,       
  .H2Port             =  M1_HALL_H2_GPIO_Port, 
- .H2Pin              =  M1_HALL_H2_Pin<<8,    
+ .H2Pin              =  M1_HALL_H2_Pin,       
  .H3Port             =  M1_HALL_H3_GPIO_Port, 
- .H3Pin              =  M1_HALL_H3_Pin<<8,    										 
+ .H3Pin              =  M1_HALL_H3_Pin,       									 
 };
 
 /**
@@ -205,7 +209,7 @@ NTC_Handle_t TempSensorParamsM1 =
   .TempRegConv =
   {
     .regADC = ADC1,
-    .channel = MC_ADC_CHANNEL_10,
+    .channel = MC_ADC_CHANNEL_4,
     .samplingTime = M1_TEMP_SAMPLING_TIME,   
   },  
   .hLowPassFilterBW        = M1_TEMP_SW_FILTER_BW_FACTOR,
@@ -233,7 +237,7 @@ RDivider_Handle_t RealBusVoltageSensorParamsM1 =
   .VbusRegConv =
   {
     .regADC = ADC1,
-    .channel = MC_ADC_CHANNEL_15,
+    .channel = MC_ADC_CHANNEL_3,
     .samplingTime = M1_VBUS_SAMPLING_TIME,   
   },
   .LowPassFilterBW       =  M1_VBUS_SW_FILTER_BW_FACTOR,  
@@ -245,8 +249,8 @@ RDivider_Handle_t RealBusVoltageSensorParamsM1 =
 UI_Handle_t UI_Params =
 {
   .bDriveNum = 0,
-  .pFct_DACInit = &DAC_Init,               
-  .pFct_DACExec = &DAC_Exec,
+  .pFct_DACInit = &DACT_Init,
+  .pFct_DACExec = &DACT_Exec,
   .pFctDACSetChannelConfig    = &DAC_SetChannelConfig,
   .pFctDACGetChannelConfig    = &DAC_GetChannelConfig,
   .pFctDACSetUserChannelValue = &DAC_SetUserChannelValue,
@@ -257,7 +261,7 @@ UI_Handle_t UI_Params =
 DAC_UI_Handle_t DAC_UI_Params = 
 {
   .hDAC_CH1_ENABLED = ENABLE,  
-  .hDAC_CH2_ENABLED = ENABLE
+  .hDAC_CH2_ENABLED = DISABLE
 };
 
 /** RAMP for Motor1.
@@ -282,7 +286,7 @@ CircleLimitation_Handle_t CircleLimitationM1 =
 UFCP_Handle_t pUSART =
 {
   ._Super.RxTimeout = 0,
-  .USARTx = USART3,
+  .USARTx = USART1,
        
 };
 

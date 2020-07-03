@@ -75,6 +75,25 @@
   */
 
 /* Private typedef -----------------------------------------------------------*/
+/**
+  * @brief Document as stated in template.h
+  *
+  * ...
+  */
+typedef enum {
+  notvalid,
+  ongoing,
+  valid
+}  RCM_status_t;
+ 
+typedef struct 
+{
+  bool enable;
+  RCM_status_t status;
+  uint16_t value;
+  uint8_t prev;
+  uint8_t next;
+} RCM_NoInj_t;
 
 typedef struct 
 {
@@ -103,6 +122,8 @@ typedef struct
 RegConv_t * RCM_handle_array [RCM_MAX_CONV];
 RCM_callback_t RCM_CB_array [RCM_MAX_CONV];
 
+RCM_NoInj_t RCM_NoInj_array [RCM_MAX_CONV];
+uint8_t RCM_currentHandle;
 uint8_t RCM_UserConvHandle;
 uint16_t RCM_UserConvValue;
 RCM_UserConvState_t RCM_UserConvState;
@@ -207,26 +228,20 @@ uint8_t RCM_RegisterRegConv(RegConv_t * regConv)
       RCM_CB_array [handle].cb = NULL; /* if a previous callback was attached, it is cleared*/
       if (LL_ADC_IsEnabled(regConv->regADC) == 0 )
       {
-       LL_ADC_DisableIT_EOS(regConv->regADC);
-       LL_ADC_ClearFlag_EOS(regConv->regADC);
-       LL_ADC_DisableIT_JEOS(regConv->regADC);
-       LL_ADC_ClearFlag_JEOS(regConv->regADC);       
 
-         /* Before starting a calibration, the ADC must have been in power-on state (ADON bit = 1) for
-          * at least two ADC clock cycles. */ 
-        LL_ADC_Enable( regConv->regADC );
         LL_ADC_StartCalibration( regConv->regADC);
         while ( LL_ADC_IsCalibrationOnGoing( regConv->regADC ) )  
         { }
+        LL_ADC_Enable( regConv->regADC );
         
       }
       else 
       {
       }
-      /* reset regular conversion sequencer length set by cubeMX */
-      LL_ADC_REG_SetSequencerLength( regConv->regADC, LL_ADC_REG_SEQ_SCAN_DISABLE );
-      /* configure the sampling time (should already be configured by for non user conversions)*/
-      LL_ADC_SetChannelSamplingTime ( regConv->regADC, __LL_ADC_DECIMAL_NB_TO_CHANNEL(regConv->channel) ,regConv->samplingTime);
+      /* conversion handler is created, will be enabled by the first call to RCM_ExecRegularConv*/
+      RCM_NoInj_array [handle].enable = false;
+      RCM_NoInj_array [handle].next = handle;
+      RCM_NoInj_array [handle].prev = handle;
     }
     else
     {
@@ -237,25 +252,119 @@ uint8_t RCM_RegisterRegConv(RegConv_t * regConv)
 
 /*
  * This function is used to read the result of a regular conversion.
- * This function polls on the ADC end of conversion.
- * As ADC have injected channels for currents sensing, 
- * There is no issue to execute regular conversion asynchronously.
+ * Depending of the MC state machine, this function can poll on the ADC end of conversion or not.
+ * If the ADC is already in use for currents sensing, the regular conversion can not
+ * be executed instantaneously but have to be scheduled in order to be executed after currents sensing
+ * inside HF task.
+ * This function takes care of inserting the handle into the scheduler.
+ * If it is possible to execute the conversion instantaneously, it will be executed, and result returned.
+ * Otherwise, the latest stored conversion result will be returned.
  *
  * NOTE: This function is not part of the public API and users should not call it. 
  */
 uint16_t RCM_ExecRegularConv (uint8_t handle)
 {
   uint16_t retVal;
- 
-  LL_ADC_REG_SetSequencerRanks( RCM_handle_array[handle]->regADC,
-                                LL_ADC_REG_RANK_1,
-                                __LL_ADC_DECIMAL_NB_TO_CHANNEL( RCM_handle_array[handle]->channel ) );
-
-  LL_ADC_REG_ReadConversionData12( RCM_handle_array[handle]->regADC );
-
-    LL_ADC_REG_StartConversionSWStart(RCM_handle_array[handle]->regADC);
-  while ( LL_ADC_IsActiveFlag_EOS (RCM_handle_array[handle]->regADC ) == 0u) {}
-  retVal = LL_ADC_REG_ReadConversionData12( RCM_handle_array[handle]->regADC );   
+  uint8_t formerNext;
+  uint8_t i=0;
+  uint8_t LastEnable = RCM_MAX_CONV;
+  
+  if (RCM_NoInj_array [handle].enable == false)
+  {
+    /* find position in the list */    
+    while (i < RCM_MAX_CONV)
+    {
+      if (RCM_NoInj_array [i].enable == true)
+      {      
+        if (RCM_NoInj_array [i].next > handle)
+        /* We found a previous reg conv to link with */
+        {          
+          formerNext = RCM_NoInj_array [i].next;
+          RCM_NoInj_array [handle].next = formerNext;
+          RCM_NoInj_array [handle].prev = i;
+          RCM_NoInj_array [i].next = handle;          
+          RCM_NoInj_array [formerNext].prev = handle;
+          i= RCM_MAX_CONV; /* stop the loop, handler inserted*/
+        }
+        else { /* We found an enabled regular conv, 
+                * but do not know yet if it is the one we have to be linked to. */
+          LastEnable = i;
+        }
+      }
+      else
+      { /* nothing to do */
+      }
+      i++;
+      if (i == RCM_MAX_CONV) 
+      /* We reach end of the array without handler inserted*/
+      {
+       if (LastEnable != RCM_MAX_CONV )
+       /* we find a regular conversion with smaller position to be linked with */
+       {
+         formerNext = RCM_NoInj_array [LastEnable].next;
+         RCM_NoInj_array [handle].next = formerNext; 
+         RCM_NoInj_array [handle].prev = LastEnable;          
+         RCM_NoInj_array [LastEnable].next = handle;
+         RCM_NoInj_array [formerNext].prev = handle;      
+       }
+       else 
+       { /* the current handle is the only one in the list */
+         /* previous and next are already pointing to itself (done at registerRegConv) */
+         RCM_currentHandle = handle; 
+       }       
+      }
+      else 
+      {
+       /* Nothing to do we are parsing the array, nothing inserted yet*/
+      }
+    }
+    /* The handle is now linked with others, we can set the enable flag */
+    RCM_NoInj_array [handle].enable = true;
+    RCM_NoInj_array [handle].status = notvalid;
+    if (RCM_NoInj_array[RCM_currentHandle].status != ongoing )
+    {/* select the new conversion to be the next scheduled only if a conversion is not ongoing*/
+      RCM_currentHandle = handle; 
+    } 
+  }
+  else
+  {
+  /* Nothing to do the current handle is already scheduled */
+  }
+   if (PWM_Handle_M1.ADCRegularLocked == false)
+  /* The ADC is free to be used asynchronously*/
+  {
+    LL_ADC_REG_SetDMATransfer(RCM_handle_array[handle]->regADC, LL_ADC_REG_DMA_TRANSFER_NONE);
+  
+    /* ADC STOP condition requested to write CHSELR is true because of the ADCSTOP is set by hardware
+       at the end of A/D conversion if the external Trigger of ADC is disabled.*/
+  
+    /*By default it is ADSTART = 0, then at the first time the CFGR1 can be written. */
+  
+    /* Disabling External Trigger of ADC */
+    LL_ADC_REG_SetTriggerSource (RCM_handle_array[handle]->regADC, LL_ADC_REG_TRIG_SOFTWARE);
+  
+    /* Set Sampling time and channel */ 
+    LL_ADC_SetSamplingTimeCommonChannels (RCM_handle_array[handle]->regADC,  RCM_handle_array[handle]->samplingTime );
+    LL_ADC_REG_SetSequencerChannels (RCM_handle_array[handle]->regADC, __LL_ADC_DECIMAL_NB_TO_CHANNEL(RCM_handle_array[handle]->channel) );
+    
+    /* Clear EOC */
+    LL_ADC_ClearFlag_EOC( RCM_handle_array[handle]->regADC );
+  
+    /* Start ADC conversion */
+    LL_ADC_REG_StartConversion( RCM_handle_array[handle]->regADC );
+  
+    /* Wait EOC */
+    while ( LL_ADC_IsActiveFlag_EOC( RCM_handle_array[handle]->regADC ) == RESET )
+    {
+    }
+  
+    /* Read the "Regular" conversion (Not related to current sampling) */
+    RCM_NoInj_array [handle].value = LL_ADC_REG_ReadConversionData12( RCM_handle_array[handle]->regADC );
+    LL_ADC_REG_SetDMATransfer( RCM_handle_array[RCM_currentHandle]->regADC, LL_ADC_REG_DMA_TRANSFER_LIMITED );
+    RCM_currentHandle = RCM_NoInj_array [handle].next;
+    RCM_NoInj_array [handle].status = valid;
+  }
+  retVal = RCM_NoInj_array [handle].value;
 return retVal;
 }
 
@@ -339,6 +448,116 @@ void RCM_ExecUserConv ()
 RCM_UserConvState_t RCM_GetUserConvState(void)
 {
   return RCM_UserConvState;
+}
+
+/**
+ * @brief  Un-schedules a regular conversion
+ *
+ * This function does not poll ADC read and is meant to be used when 
+ * ADCs do not support injected channels.
+ *
+ * In such configurations, once a regular conversion has been executed once,
+ * It is continuously scheduled in HF task after current reading.
+ *
+ * This function remove the handle from the scheduling.
+ *
+ * @note Note that even though, in such configurations, regular conversions are 
+ *       continuously scheduled after having been requested once, the results of
+ *       subsequent conversions are not made available unless the users invoke
+ *       RCM_RequestUserConv() again.   
+ *
+ */
+bool RCM_PauseRegularConv (uint8_t handle)
+{
+  bool retVal;
+  uint8_t Prev;
+  uint8_t Next;
+  
+  if (handle < RCM_MAX_CONV)
+  {
+    retVal = true;
+    if (RCM_NoInj_array [handle].enable == true)
+    {
+      RCM_NoInj_array [handle].enable = false;
+      RCM_NoInj_array [handle].status = notvalid; 
+      Prev = RCM_NoInj_array [handle].prev;
+      Next = RCM_NoInj_array [handle].next;
+      RCM_NoInj_array [Prev].next = RCM_NoInj_array [handle].next;
+      RCM_NoInj_array [Next].prev = RCM_NoInj_array [handle].prev;
+    }
+    else 
+    {
+    }
+  }
+  else {
+    retVal = false;
+  }
+return retVal;
+}
+
+/*
+ * Starts the next scheduled regular conversion
+ *
+ * This function does not poll on ADC read and is foreseen to be used inside
+ * high frequency task where ADC are shared between currents reading
+ * and user conversion.
+ *
+ * NOTE: This function is not part of the public API and users should not call it. 
+ */
+void RCM_ExecNextConv (void)
+{
+  if (RCM_NoInj_array [RCM_currentHandle].enable == true) 
+  {
+    /* When this function is called, the ADC conversions triggered by External
+       event for current reading has been completed. 
+       ADC is therefore ready to be started because already stopped.*/
+       
+    /* Clear EOC */
+    LL_ADC_ClearFlag_EOC( ADC1 );
+    
+    /* Disabling ADC DMA request  */
+    LL_ADC_REG_SetDMATransfer(RCM_handle_array[RCM_currentHandle]->regADC, LL_ADC_REG_DMA_TRANSFER_NONE);
+    
+    /* Disabling External Trigger of ADC */
+    LL_ADC_REG_SetTriggerSource (RCM_handle_array[RCM_currentHandle]->regADC, LL_ADC_REG_TRIG_SOFTWARE);
+      
+    /* Set Sampling time and channel of ADC for Regular Conversion */
+    LL_ADC_SetSamplingTimeCommonChannels (RCM_handle_array[RCM_currentHandle]->regADC,  RCM_handle_array[RCM_currentHandle]->samplingTime );
+    LL_ADC_REG_SetSequencerChannels (RCM_handle_array[RCM_currentHandle]->regADC, __LL_ADC_DECIMAL_NB_TO_CHANNEL(RCM_handle_array[RCM_currentHandle]->channel) );
+    
+    /* Start ADC for regular conversion */
+    LL_ADC_REG_StartConversion( RCM_handle_array[RCM_currentHandle]->regADC );
+    RCM_NoInj_array [RCM_currentHandle].status = ongoing;
+  }
+  else
+  {
+  /* nothing to do, conversion not enabled have already notvalid status */
+  }
+}
+
+/*
+ * Reads the result of the ongoing regular conversion
+ *
+ * This function is foreseen to be used inside
+ * high frequency task where ADC are shared between current reading
+ * and user conversion.
+ *
+ * NOTE: This function is not part of the public API and users should not call it. 
+ */
+void RCM_ReadOngoingConv (void)
+{
+  if ( RCM_NoInj_array [RCM_currentHandle].status == ongoing )
+  {
+    /* Reading of ADC Converted Value */
+    RCM_NoInj_array [RCM_currentHandle].value = LL_ADC_REG_ReadConversionData12( RCM_handle_array[RCM_currentHandle]->regADC );
+    RCM_NoInj_array [RCM_currentHandle].status = valid;
+    /* Restore back DMA configuration. */
+    
+    LL_ADC_REG_SetDMATransfer( RCM_handle_array[RCM_currentHandle]->regADC, LL_ADC_REG_DMA_TRANSFER_LIMITED );
+  }
+  
+  /* Prepare next conversion */
+  RCM_currentHandle = RCM_NoInj_array [RCM_currentHandle].next;
 }
 
 /**

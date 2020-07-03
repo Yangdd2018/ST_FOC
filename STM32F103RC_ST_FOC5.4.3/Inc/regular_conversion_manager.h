@@ -87,6 +87,15 @@ void RCM_ExecUserConv (void);
 /* return the state of the user conversion state machine*/
 RCM_UserConvState_t RCM_GetUserConvState(void);
 
+/* Function used to un-schedule a regular conversion exectuted after current sampling in HF task */
+bool RCM_PauseRegularConv (uint8_t handle);
+
+/* non blocking function to start conversion inside HF task */
+void RCM_ExecNextConv (void);
+
+/* non blocking function used to read back already started regular conversion*/
+void RCM_ReadOngoingConv (void);
+
 /**
   * @}
   */

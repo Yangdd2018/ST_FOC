@@ -22,7 +22,11 @@
 #ifndef MC_PARAMETERS_H
 #define MC_PARAMETERS_H
 
-#include "r3_2_f1xx_pwm_curr_fdbk.h"
+#include "r3_f0xx_pwm_curr_fdbk.h"
+ 
+ 
+ 
+ 
  
  
  
@@ -30,14 +34,11 @@
 
 /* USER CODE END Additional include */  
  
+extern const R3_1_Params_t R3_1_Params;
  
  
  
  
- 
- 
- 
-extern const R3_2_Params_t R3_2_ParamsM1;
  
  
  

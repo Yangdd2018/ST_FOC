@@ -138,15 +138,10 @@ __weak void MCboot( MCI_Handle_t* pMCIList[NBR_OF_MOTORS],MCT_Handle_t* pMCTList
   /*    PWM and current sensing component initialization    */
   /**********************************************************/
   pwmcHandle[M1] = &PWM_Handle_M1._Super;
-  R3_2_Init(&PWM_Handle_M1);
+  R3_1_Init(&PWM_Handle_M1);
   /* USER CODE BEGIN MCboot 1 */
 
   /* USER CODE END MCboot 1 */
-
-  /**************************************/
-  /*    Start timers synchronously      */
-  /**************************************/
-  startTimers();    
 
   /******************************************************/
   /*   PID component initialization: speed regulation   */
@@ -336,7 +331,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
   switch ( StateM1 )
   {
   case IDLE_START:
-    R3_2_TurnOnLowSides( pwmcHandle[M1] );
+    R3_1_TurnOnLowSides( pwmcHandle[M1] );
     TSK_SetChargeBootCapDelayM1( CHARGE_BOOT_CAP_TICKS );
     STM_NextState( &STM[M1], CHARGE_BOOT_CAP );
     break;
@@ -368,7 +363,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     {
       FOC_Clear( M1 );
 
-      R3_2_SwitchOnPWM( pwmcHandle[M1] );
+      R3_1_SwitchOnPWM( pwmcHandle[M1] );
     }
     break;
 
@@ -411,7 +406,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     break;
 
   case ANY_STOP:
-    R3_2_SwitchOffPWM( pwmcHandle[M1] );
+    R3_1_SwitchOffPWM( pwmcHandle[M1] );
     FOC_Clear( M1 );
     MPM_Clear( (MotorPowMeas_Handle_t*) pMPM[M1] );
     TSK_SetStopPermanencyTimeM1( STOPPERMANENCY_TICKS );
@@ -658,6 +653,7 @@ inline uint16_t FOC_CurrControllerM1(void)
   speedHandle = STC_GetSpeedSensor(pSTC[M1]);
   hElAngle = SPD_GetElAngle(speedHandle);
   PWMC_GetPhaseCurrents(pwmcHandle[M1], &Iab);
+  RCM_ExecNextConv();
   Ialphabeta = MCM_Clarke(Iab);
   Iqd = MCM_Park(Ialphabeta, hElAngle);
   Vqd.q = PI_Controller(pPIDIq[M1],
@@ -670,6 +666,7 @@ inline uint16_t FOC_CurrControllerM1(void)
   hElAngle += SPD_GetInstElSpeedDpp(speedHandle)*REV_PARK_ANGLE_COMPENSATION_FACTOR;
   Valphabeta = MCM_Rev_Park(Vqd, hElAngle);
   hCodeError = PWMC_SetPhaseVoltage(pwmcHandle[M1], Valphabeta);
+  RCM_ReadOngoingConv();
   FOCVars[M1].Vqd = Vqd;
   FOCVars[M1].Iab = Iab;
   FOCVars[M1].Ialphabeta = Ialphabeta;
@@ -798,7 +795,7 @@ __weak void TSK_HardwareFaultTask(void)
 
   /* USER CODE END TSK_HardwareFaultTask 0 */
   
-  R3_2_SwitchOffPWM(pwmcHandle[M1]);
+  R3_1_SwitchOffPWM(pwmcHandle[M1]);
   STM_FaultProcessing(&STM[M1], MC_SW_ERROR, 0);
   /* USER CODE BEGIN TSK_HardwareFaultTask 1 */
 
@@ -809,6 +806,11 @@ __weak void TSK_HardwareFaultTask(void)
   */
 __weak void mc_lock_pins (void)
 {
+LL_GPIO_LockPin(M1_BUS_VOLTAGE_GPIO_Port, M1_BUS_VOLTAGE_Pin);
+LL_GPIO_LockPin(M1_CURR_AMPL_W_GPIO_Port, M1_CURR_AMPL_W_Pin);
+LL_GPIO_LockPin(M1_CURR_AMPL_V_GPIO_Port, M1_CURR_AMPL_V_Pin);
+LL_GPIO_LockPin(M1_CURR_AMPL_U_GPIO_Port, M1_CURR_AMPL_U_Pin);
+LL_GPIO_LockPin(M1_TEMPERATURE_GPIO_Port, M1_TEMPERATURE_Pin);
 LL_GPIO_LockPin(M1_HALL_H3_GPIO_Port, M1_HALL_H3_Pin);
 LL_GPIO_LockPin(M1_HALL_H1_GPIO_Port, M1_HALL_H1_Pin);
 LL_GPIO_LockPin(M1_HALL_H2_GPIO_Port, M1_HALL_H2_Pin);
@@ -818,11 +820,6 @@ LL_GPIO_LockPin(M1_PWM_VL_GPIO_Port, M1_PWM_VL_Pin);
 LL_GPIO_LockPin(M1_PWM_WH_GPIO_Port, M1_PWM_WH_Pin);
 LL_GPIO_LockPin(M1_PWM_WL_GPIO_Port, M1_PWM_WL_Pin);
 LL_GPIO_LockPin(M1_PWM_UL_GPIO_Port, M1_PWM_UL_Pin);
-LL_GPIO_LockPin(M1_BUS_VOLTAGE_GPIO_Port, M1_BUS_VOLTAGE_Pin);
-LL_GPIO_LockPin(M1_CURR_AMPL_W_GPIO_Port, M1_CURR_AMPL_W_Pin);
-LL_GPIO_LockPin(M1_CURR_AMPL_U_GPIO_Port, M1_CURR_AMPL_U_Pin);
-LL_GPIO_LockPin(M1_CURR_AMPL_V_GPIO_Port, M1_CURR_AMPL_V_Pin);
-LL_GPIO_LockPin(M1_TEMPERATURE_GPIO_Port, M1_TEMPERATURE_Pin);
 }
 
 /* USER CODE BEGIN mc_task 0 */
